@@ -1,0 +1,73 @@
+# Игнорировать файлы с чувствительными данными
+.env
+*.env
+secrets.json
+*.key
+*.pem
+
+# Игнорировать базы данных SQLite (если используется)
+*.sqlite3
+*.db
+
+# Игнорировать статические файлы, собранные collectstatic (если они генерируются)
+/staticfiles/
+
+# Игнорировать медиафайлы (загружаемые пользователями)
+/media/
+
+# Игнорировать директорию виртуального окружения
+/venv/
+/env/
+/.venv/
+*.venv
+
+# Игнорировать кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+
+# Игнорировать директорию для хранения кэша
+.pytest_cache/
+.cache/
+
+# Игнорировать файлы IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Игнорировать файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Игнорировать зависимости Python (если используете virtualenv)
+*.egg-info/
+/dist/
+/build/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Игнорировать логи
+*.log
+logs/
+
+# Игнорировать файлы, созданные Coverage
+.coverage
+htmlcov/
+
+# Игнорировать миграции (если хотите, чтобы они не коммитились)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Игнорировать Jupyter Notebook
+.ipynb_checkpoints/
+
+# Игнорировать файлы, связанные с Docker (если используете)
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Игнорировать файлы, связанные с тестами (если нужно)
+/test_results/
