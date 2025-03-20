@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генерация изображений на C++</title>
+    <link type="text/css" href="{% static 'raytracingbasics/css/styles.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'raytracingbasics/images/1.png' %}" type="image/x-icon"/>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">Темная тема</button>
+
+<div class="content">
+    <h1 class="fade-in">PPM, вывод цветовой палитры</h1>
+
+    <p class="fade-in">Исполняемый файл можно преобразовать в изображения следующего формата, если заполнить буферы потока данными о кодировке цветов каждого пикселя будущего изображения:</p>
+
+    <pre class="fade-in"><code>#include &lt;iostream&gt;
+
+int main() {
+
+    // Image
+    int image_width = 256;
+    int image_height = 256;
+
+    // Render
+    std::cout &lt;&lt; "P3\n" &lt;&lt; image_width &lt;&lt; ' ' &lt;&lt; image_height &lt;&lt; "\n255\n";
+
+    for (int j = 0; j &lt; image_height; j++) {
+        for (int i = 0; i &lt; image_width; i++) {
+            auto r = double(i) / (image_width-1); // row-intensity
+            auto g = double(j) / (image_height-1); // column-intensity
+            auto b = 0.0;
+
+            int ir = int(255.999 * r);  // red color intensity
+            int ig = int(255.999 * g);  // green color intensity
+            int ib = int(255.999 * b);  // blue color intensity
+
+            std::cout &lt;&lt; ir &lt;&lt; ' ' &lt;&lt; ig &lt;&lt; ' ' &lt;&lt; ib &lt;&lt; '\n';  // pixel's rgb writing
+        }
+    }
+}</code></pre>
+
+    <h2 class="fade-in">Пример команды для конвертации исполняемого файла в изображение:</h2>
+
+    <pre class="fade-in"><code>
+g++ -o your_exe your_programm.cpp</code></pre>
+
+    <p class="fade-in">Каждый пиксель запишется строкой из трех чисел, представляющих интенсивности цветов:</p>
+
+    <pre class="fade-in"><code>P3
+256 256
+255
+0 0 0  // first pixel
+1 0 0  // second pixel
+2 0 0
+3 0 0
+4 0 0
+....</code></pre>
+
+    <img src="{% static 'raytracingbasics/images/1.png' %}" alt="Выходной результат" class="fade-in">
+    <p class="note fade-in">Выходной результат</p>
+
+    <h2 class="fade-in">Изменение цветовых компонентов</h2>
+
+    <p class="fade-in">Пусть теперь голубой цвет имеет ненулевую интенсивность. В этом случае в правом нижнем углу мы получим сумму максимальной интенсивности всех цветовых компонентов. Это даст нам белый цвет.</p>
+
+    <pre class="fade-in"><code>double r = double(i) / (image_width-1);
+double g = double(j) / (image_height-1);
+double b = double(j) / (image_height-1);</code></pre>
+
+    <img src="{% static 'raytracingbasics/images/2.png' %}" alt="Результат с голубым цветом" class="fade-in">
+    <p class="note fade-in">Выходной результат</p>
+
+    <p class="fade-in">Уберем интенсивность зеленого цвета пикселя. В нижнем правом углу, для максимальной интенсивности красного и синего компонентов мы получим фиолетовый цвет.</p>
+
+    <pre class="fade-in"><code>double r = double(i) / (image_width-1);
+double g = 0.0;
+double b = double(j) / (image_height-1);</code></pre>
+
+    <img src="{% static 'raytracingbasics/images/3.png' %}" alt="Результат без зеленого цвета" class="fade-in">
+    <p class="note fade-in">Выходной результат</p>
+
+    <h2 class="fade-in">Подсказка для предсказания цветов</h2>
+
+    <img src="{% static 'raytracingbasics/images/4.png' %}" alt="Подсказка для предсказания цветов" class="fade-in">
+    <p class="note fade-in">Выходной результат</p>
+
+    <h2 class="fade-in">Добавление отладки</h2>
+
+    <p class="fade-in">Для удобства отладки нашей системы рендеринга, добавим возможность просмотра хода рендеринга в поток вывода журнала. Для этого пропишем следующую строчку:</p>
+
+    <pre class="fade-in"><code>for (int j = 0; j &lt; image_height; j++) {
+        for (int i = 0; i &lt; image_width; i++) {
+            std::clog &lt;&lt; "\rScanlines remaining: " &lt;&lt; (image_height - j) &lt;&lt; ' ' &lt;&lt; std::flush;</code></pre>
+
+    <p class="fade-in">Теперь при запуске конвертера в изображение, мы увидим счетчик оставшихся строк для рендеринга.</p>
+</div>
+
+<script>
+    // Переключение темы
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const button = document.querySelector('.theme-toggle');
+        if (document.body.classList.contains('dark-theme')) {
+            button.textContent = 'Светлая тема';
+        } else {
+            button.textContent = 'Темная тема';
+        }
+    }
+
+    // Анимация появления элементов при прокрутке
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(element => {
+        observer.observe(element);
+    });
+
+    // Имитация прогресса рендеринга
+    function simulateRendering() {
+        const progressElement = document.createElement('p');
+        progressElement.textContent = 'Рендеринг... 0%';
+        document.querySelector('.content').appendChild(progressElement);
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressElement.textContent = `Рендеринг... ${progress}%`;
+            if (progress >= 100) {
+                clearInterval(interval);
+                progressElement.textContent = 'Рендеринг завершен!';
+            }
+        }, 300);
+    }
+
+    // Запуск имитации рендеринга через 3 секунды
+    setTimeout(simulateRendering, 3000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генерация изображений на C++</title>
+     <link type="text/css" href="{% static 'raytracingbasics/css/styles.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'raytracingbasics/images/8.png' %}" type="image/x-icon"/>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Темная тема</button>
+
+    <div class="content">
+        <h1 class="fade-in">Работа с лучами</h1>
+
+        <p class="fade-in"> Теперь мы готовы к тому, чтобы написать ray tracer. ray tracer посылает лучи через каждый
+            пиксель и рассчитывает цвет в направлении брошенного луча. Нам будет необходимо выполнить три основные
+            задачи:
+            <br>
+        <ul>
+            <li>рассчитать луч выходящий из глаз наблюдателя через пиксели</li> <br>
+            <li>определить с какими объектами пересекается сгенерированный луч</li> <br>
+            <li>рассчитать цвет для ближайшей точки пересечения</li><br>
+        </ul>
+
+        Для изображения мы выберем разрешение 16:9, это означает что:</p> <br>
+
+        $$ \mathbf{width}/{height} = 16/9 = 1.7778 $$
+
+        <br>
+
+        <p>Определим это отношение в главной функции программы:</p>
+
+        <pre class="fade-in"><code>auto aspect_ratio = 16.0/9.0;</code></pre>
+
+
+
+        <p>Пусть ширина экрана будет равна 400:</p>
+
+        <pre class="fade-in"><code>int image_width = 400;</code></pre>
+
+        <p>Тогда высота изображения будет вычислять по формуле:</p>
+
+        <pre class="fade-in"><code>int image_height = (int)(image_width / aspect_ratio);</code></pre>
+
+        <p>Также будем проверять, чтобы image_height не был меньше единицы:</p>
+
+        <pre class="fade-in"><code>	
+int image_height = (int)(image_width / aspect_ratio);
+image_height = (image_height < 1) ? 1 : image_height;</code></pre>
+
+
+        <h2>Камера</h2>
+        <p>Далее определим камеру: точку в трехмерном пространстве из которой будут выходить лучи сцены. Вектор идущий
+            от камеры в центр области просмотра будет ортогонален области просмотра. Для начал установим расстояние
+            между областью просмотра и камерой расстояние равной 1. Такое расстояние называется *фокусным*.
+
+            Для простоты начнем с центра камеры (0,0,0). Ось Y направим вверх, ось X направим вправо, ось Z направим в
+            направлении взгляда. Обычно это называется *правыми координатами*.</p>
+
+        <img src="{% static 'raytracingbasics/images/6.png' %}" alt="Выходной результат" class="fade-in">
+
+
+        <p>У нас имеется большая проблема. Ориентация координатных осей нашей сцены конфликтует с ориентацией
+            координатных осей изображения.</p>
+
+        <img src="{% static 'raytracingbasics/images/7.png' %}" alt="Выходной результат" class="fade-in">
+
+        <p>Определим длину фокального вектора, высоту и ширину дисплея, центр нашей камеры.</p>
+
+        <pre class="fade-in"><code>	
+            auto focal_length = 1.0;
+
+            auto viewport_height = 2.0;
+            
+            auto viewport_width = viewport_height * ((double)(image_width) / image_height);
+        
+            auto camera_center = vec3(0.0,0.0,0.0);</code></pre>
+
+        <p>Далее вычислим вектора, которые будут идти вдоль ширины и высоты дисплея:</p>
+
+        <pre class="fade-in"><code>	
+            auto viewport_u = vec3(viewport_width, 0, 0);
+
+            auto viewport_v = vec3(0, -viewport_height, 0);</code></pre>
+
+        <p>Рассчитываем вектора смещения вдоль ширины и длины дисплея:</p>
+
+        <pre class="fade-in"><code>	
+            auto pixel_delta_u = viewport_u / image_width;
+
+            auto pixel_delta_v = viewport_v / image_height;</code></pre>
+
+        <p>Далее положение верхнего левого угла экрана. Сначала вычитаем из положения камеры фокальное расстояние, чтобы
+            быть на уровне глубины дисплея. Мы оказываемся в центре координатной системы и нам нужно вычесть половинки
+            длины и высоты дисплея из новой позиции камеры, чтобы добраться до крайнего левого угла. Чтобы получить
+            координату пикселя левого верхнего угла, нам нужно дополнительно прибавить элементарное смещение к
+            координате левого верхнего угла:</p>
+
+        <pre class="fade-in"><code>	
+            auto viewport_upper_left = camera_center - vec3(0,0,focal_length) - viewport_u/2 - viewport_v/2;
+
+            auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);</code></pre>
+
+        <p>Это изменит нашу систему рендеринга:
+
+            Позиция текущего пикселя будет находиться, как сумма позиции пикселя в верхнем левом углу и элементарного
+            смещения по длине умноженную на индекс длины и элементарного смещения по высоте умноженную на индекс высоты.
+            Таким образом мы сможем перебрать все пиксели дисплея.
+
+            Найдя конечные координаты пикселя, мы сформируем вектор идущий от центра камеры до пикселя путем вычитания
+            из координат пикселя координат центра камеры. Это даст нам направление луча, исходящее от камеры.
+
+            Сформируем объект луча с началом в центре камеры и найденным направлением луча.</p>
+
+
+        <pre class="fade-in"><code>	
+            for (int j = 0; j < image_height; j++) {
+                for (int i = 0; i < image_width; i++) {
+                    std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
+            
+            
+                    auto pixel_center = pixel00_loc + i * (pixel_delta_u) + j * (pixel_delta_v);
+            
+                    auto ray_direction = pixel_center - camera_center;
+            
+                    ray r(camera_center, ray_direction);
+            
+                    color pixel_color = ray_color(r);
+            
+                    write_color(std::cout, pixel_color);
+            
+                }
+            }</code></pre>
+
+        <h2>Новый расчет цвета пикселя</h2>
+
+        <p>Добавим в главную программу функцию расчета цвета, для начала хватит этого. Это лишь заглушка.</p>
+
+        <pre class="fade-in"><code>
+            color ray_color(const ray& r){
+
+                return color(0,0,0);
+            
+            }
+        </code></pre>
+
+        <p>Для расчета цвета реализуем простой градиент. Эта функция будет линейно смешивать голубой и белый цвета в
+            зависимости от высоты координаты. Сначала нормализуем направление луча:</p>
+
+        <pre class="fade-in"><code>	
+        color ray_color(const ray& r){
+                vec3 unit_direction = unit_vector(r.direction());
+                
+                return color(0,0,0);
+            }
+        </code></pre>
+
+        <p>Введем переменную формулу вычисления смешанного цвета:</p>
+
+        $$ \mathbf{blendedValue} = \mathbf{(1-a)*startValue} + a*endValue\mathbf{} $$
+
+        <p>где a - равен 0 для белого цвета и 1для голубого</p>
+
+        <p>Эта переменная основана на координате y нормированного вектора луча. Мы не имеем определение отрицательного
+            цвета, поэтому нам нужно избавиться от отрицательных значений путем сложения с единицей. Тогда нормальность
+            нарушится и нам нужно будет привести правую границу области к 1. Ее наибольшее значение может быть равно 2,
+            поэтому делим на 0.5, чтобы наверняка.</p>
+
+        <pre class="fade-in"><code>	
+            color ray_color(const ray& r){
+                vec3 unit_direction = unit_vector(r.direction());
+                auto a = 0.5 * (unit.direction.y() + 1);
+                return color(0,0,0);
+            }
+        </code></pre>
+
+        <p>Подставим в формулу смешанного цвета.</p>
+
+        <pre class="fade-in"><code>	
+            color ray_color(const ray& r){
+                vec3 unit_direction = unit_vector(r.direction());
+                auto a = 0.5 * (unit.direction.y() + 1);
+                return (1 - a) * color(1.0,1.0,1.0) + a * color(0.5, 0.7, 1.0);;
+            }
+        </code></pre>
+
+        <img src="{% static 'raytracingbasics/images/8.png' %}" alt="Выходной результат" class="fade-in">
+        <p class="note fade-in">Имитация неба</p>
+
+
+    </div>
+
+    <script>
+        // Переключение темы
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const button = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
+                button.textContent = 'Светлая тема';
+            } else {
+                button.textContent = 'Темная тема';
+            }
+        }
+
+        // Анимация появления элементов при прокрутке
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Имитация прогресса рендеринга
+        function simulateRendering() {
+            const progressElement = document.createElement('p');
+            progressElement.textContent = 'Рендеринг... 0%';
+            document.querySelector('.content').appendChild(progressElement);
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressElement.textContent = `Рендеринг... ${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressElement.textContent = 'Рендеринг завершен!';
+                }
+            }, 300);
+        }
+
+        // Запуск имитации рендеринга через 3 секунды
+        setTimeout(simulateRendering, 3000);
+    </script>
+
+</body>
+
+</html>

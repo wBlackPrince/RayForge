@@ -1,0 +1,156 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генерация изображений на C++</title>
+    <link type="text/css" href="{% static 'raytracingbasics/css/styles.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'raytracingbasics/images/13.png' %}" type="image/x-icon"/>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Темная тема</button>
+
+    <div class="content">
+        <h1 class="fade-in">Нормали поверхности и множественные объекты.</h1>
+
+
+
+
+        <p>
+            Теперь мы будем искать не просто факт, того, что луч пересек объект, а возвратим само значение t, при
+            котором произошло пересечение луча со сферой.
+        </p>
+
+        <pre class="fade-in"><code>	
+            double hit_sphere(const point3& center, double radius, ray& r) {
+                ...
+            
+                if (discriminant < 0){
+                    return -1;
+                }
+                else{
+                    return ((-b - std::sqrt(discriminant)) / (2.0 * a));
+                }
+            
+            }
+        </code></pre>
+
+
+        <p>
+            В функции определения цвета пикселя сохраняем этот параметр t. Далее проверяем, чтобы он не был меньше нуля
+            (чтобы были пересечения). В случае истины, мы сформируем единичный вектор нормали путем вычитания из вектора
+            луча ,смотрящего направление t , вектора хранящего положение центра сферы.
+        </p>
+
+        <pre class="fade-in"><code>	
+            color ray_color(ray& r){
+
+                auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
+            
+                if (t > 0.0){
+                    vec3 N = unit_vector(r.at(t) - vec3(0,0, -1));
+                    return N;
+                }
+            
+                vec3 unit_direction = unit_vector(r.direction());
+            
+                auto a = 0.5 * (unit_direction.y() + 1.0);
+            
+                color blendColor = (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 0.9);
+            
+                return blendColor;
+            }
+        </code></pre>
+
+        <img src="{% static 'raytracingbasics/images/12.png' %}" alt="Выходной результат" class="fade-in">
+        <p class="note fade-in">Поясняющий рисунок пересечения</p>
+
+        <p>Попробуем визуализировать координаты полученной нормали в виде цветов:</p>
+
+        <img src="{% static 'raytracingbasics/images/11.png' %}" alt="Выходной результат" class="fade-in">
+        <p class="note fade-in">Сфера с нормальным освещением</p>
+
+
+
+        <p>
+            Нам нужно избежать негативных компонентов вектора нормали, применим следующее преобразование:
+        </p>
+
+        <pre class="fade-in"><code>	
+            color ray_color(ray& r){
+
+                auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
+            
+                if (t > 0.0){
+                    vec3 N = unit_vector(r.at(t) - vec3(0,0, -1));
+                    return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1);
+                }
+            
+                ...
+            }
+        </code></pre>
+
+        <img src="{% static 'raytracingbasics/images/13.png' %}" alt="Выходной результат" class="fade-in">
+        <p class="note fade-in">Сфера с правильным нормальным освещением</p>
+
+
+    </div>
+
+    <script>
+        // Переключение темы
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const button = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
+                button.textContent = 'Светлая тема';
+            } else {
+                button.textContent = 'Темная тема';
+            }
+        }
+
+        // Анимация появления элементов при прокрутке
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Имитация прогресса рендеринга
+        function simulateRendering() {
+            const progressElement = document.createElement('p');
+            progressElement.textContent = 'Рендеринг... 0%';
+            document.querySelector('.content').appendChild(progressElement);
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressElement.textContent = `Рендеринг... ${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressElement.textContent = 'Рендеринг завершен!';
+                }
+            }, 300);
+        }
+
+        // Запуск имитации рендеринга через 3 секунды
+        setTimeout(simulateRendering, 3000);
+    </script>
+
+</body>
+
+</html>

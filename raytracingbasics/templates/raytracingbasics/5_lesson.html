@@ -1,0 +1,144 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генерация изображений на C++</title>
+    <link type="text/css" href="{% static 'raytracingbasics/css/styles.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'raytracingbasics/images/10.png' %}" type="image/x-icon"/>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Темная тема</button>
+
+    <div class="content">
+        <h1 class="fade-in">Пересечение со сферой</h1>
+
+        <p>Сфера имеет уравнение:
+
+            $$ x^2 + y^2 + z^2 - r^2 = 0 $$
+
+            Если сфера находится не в центре координат а в произвольной точке C.
+
+            $$ (C_x - x)^2 + (C_x - y)^2 + (C_x - z)^2 = r^2 $$
+
+            Радиус мы можем выразить, как вектор с началом из C и концом в произвольной точке на сфере P.
+
+            $$ (C_x - x)^2 + (C_x - y)^2 + (C_x - z)^2 = (C - P)(C-P) $$
+
+            $$ (C - P)(C-P) = r^2 $$
+
+            Мы хотим знать пересекает ли луч P сферу в каком-нибудь месте.
+
+            $$ (C - P(t))(C-P(t)) = r^2 $$
+
+            Мы будем искать для каких значений t, это правда:
+
+            $$ (C - (Q + td))(C-(Q + td)) = r^2 $$
+
+            Преобразуем уравнение:
+
+            $$ (- td + (C - Q))(- td + (C - Q)) = r^2 $$
+
+            Разложим и получим:
+
+            $$ t^2dd - 2td(C - Q) + (C - Q)(C - Q) - r^2 = 0 $$
+
+            Нам изначально известны векторы C, Q, d. Единственная неизвестная - t.
+
+            Это решается как квадратное уравнение.
+
+            Коэффициенты уравнения следующие:
+
+            $$ a = dd$$
+
+            $$ b = -2d(C - Q) $$
+
+            $$ c = (C - Q)(C - Q) - r^2 $$
+
+        </p>
+
+        <img src="{% static 'raytracingbasics/images/9.png' %}" alt="Выходной результат" class="fade-in">
+        <p class="note fade-in">Результаты пересечения со сферой</p>
+
+        <p>Напишем функцию проверки столкновения со сферой, нам достаточно чтобы дискриминант было больше или равен 0.
+        </p>
+
+        <pre class="fade-in"><code>	
+            bool hit_sphere(const point3& center, double radius, ray& r){
+
+                vec3 oc = center - r.origin();
+            
+                auto a = dot(r.direction(), r.direction());
+            
+                auto b = -2 * dot(r.direction(), oc);
+            
+                auto c = dot(oc, oc) - radius * radius;
+            
+                auto diskriminant = b * b - 4 * a * c;
+            
+                return (diskriminant >= 0);
+            </code></pre>
+
+        <img src="{% static 'raytracingbasics/images/10.png' %}" alt="Выходной результат" class="fade-in">
+        <p class="note fade-in">Ray tracing со сферой</p>
+
+    </div>
+
+    <script>
+        // Переключение темы
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const button = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
+                button.textContent = 'Светлая тема';
+            } else {
+                button.textContent = 'Темная тема';
+            }
+        }
+
+        // Анимация появления элементов при прокрутке
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Имитация прогресса рендеринга
+        function simulateRendering() {
+            const progressElement = document.createElement('p');
+            progressElement.textContent = 'Рендеринг... 0%';
+            document.querySelector('.content').appendChild(progressElement);
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressElement.textContent = `Рендеринг... ${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressElement.textContent = 'Рендеринг завершен!';
+                }
+            }, 300);
+        }
+
+        // Запуск имитации рендеринга через 3 секунды
+        setTimeout(simulateRendering, 3000);
+    </script>
+
+</body>
+
+</html>

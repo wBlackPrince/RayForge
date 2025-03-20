@@ -1,0 +1,299 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Класс вектора и цвета</title>
+    <link type="text/css" href="{% static 'raytracingbasics/css/styles.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'raytracingbasics/images/3.png' %}" type="image/x-icon"/>
+</head>
+
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Темная тема</button>
+
+    <div class="content">
+        <h1 class="fade-in">Класс вектора и цвета</h1>
+
+        <p class="fade-in">Мы будем использовать этот класс для цветов, местоположений, направлений, смещений и т.д.</p>
+
+        <p>Его реализация следующая: (мы вынесем реализацию класса вектора в отдельный заголовочный файл)</p>
+
+
+        <h2 class="fade-in">Реализация класса вектора</h2>
+
+        <pre class="fade-in"><code>#ifndef VEC3_H
+#define VEC3_H
+
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+
+class vec3 {
+public:
+    double e[3];
+
+    vec3() : e{0,0,0} {}
+    vec3(double e0, double e1, double e2) : e{e0, e1, e2} {}
+
+    double x() const { return e[0]; }
+    double y() const { return e[1]; }
+    double z() const { return e[2]; }
+
+    vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
+
+    double operator[](int i) const { return e[i]; }
+    double& operator[](int i) { return e[i]; }
+
+    vec3& operator+=(const vec3& v) {
+        e[0] += v.e[0];
+        e[1] += v.e[1];
+        e[2] += v.e[2];
+        return *this;
+    }
+
+    vec3& operator*=(double t) {
+        e[0] *= t;
+        e[1] *= t;
+        e[2] *= t;
+        return *this;
+    }
+
+    vec3& operator/=(double t) {
+        return *this *= 1/t;
+    }
+
+    double length() const {
+        return std::sqrt(length_squared());
+    }
+
+    double length_squared() const {
+        return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
+    }
+};
+
+#endif</code></pre>
+
+        <p>После класса добавим псевдоним для класса вектора.</p>
+        <pre>
+    <code>using point3 = vec3;
+    </code>
+</pre>
+
+        <p>Пропишем дополнительные функции для вектора:</p>
+        <pre>
+    <code>inline std::ostream& operator<<(std::ostream& out, const vec3& v) {
+        return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
+    }
+    
+    
+    
+    inline vec3 operator+(const vec3& u, const vec3& v) {
+        return vec3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
+    }
+    
+    
+    inline vec3 operator-(const vec3& u, const vec3& v) {
+        return vec3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
+    }
+    
+      
+    
+    inline vec3 operator*(const vec3& u, const vec3& v) {
+        return vec3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
+    }
+    
+      
+    
+    inline vec3 operator*(double t, const vec3& v) {
+        return vec3(t*v.e[0], t*v.e[1], t*v.e[2]);
+    }
+    
+      
+    
+    inline vec3 operator*(const vec3& v, double t) {
+        return t * v;
+    }
+    
+      
+    
+    inline vec3 operator/(const vec3& v, double t) {
+        return (1/t) * v;
+    }
+    
+      
+    
+    inline double dot(const vec3& u, const vec3& v) {
+        return u.e[0] * v.e[0]
+             + u.e[1] * v.e[1]
+            + u.e[2] * v.e[2];
+    }
+    
+      
+    
+    inline vec3 cross(const vec3& u, const vec3& v) {
+        return vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
+                u.e[2] * v.e[0] - u.e[0] * v.e[2],
+                u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+    
+    }
+    
+      
+    
+    inline vec3 unit_vector(const vec3& v) {
+    
+        return v / v.length();
+    
+    }
+    </code>
+</pre>
+
+
+        <p>Использование типа double в нашей системе рендеринга повышает точность в два раза по сравнению с типом
+            float, однако в условиях ограниченных ресурсов памяти, последний тип будет предпочтительнее.</p>
+
+
+        <h2 class="fade-in">Реализация класса цвета</h2>
+
+        <p>Сделаем аналогичный класс-псевдоним для класса цвета, который по сути тоже будет вектором:</p>
+
+        <pre class="fade-in"><code>#ifndef COLOR_H
+#define COLOR_H
+
+#include "vec3.h"
+#include &lt;iostream&gt;
+
+using color = vec3;
+
+void write_color(std::ostream& out, const color& pixel_color) {
+    auto r = pixel_color.x();
+    auto g = pixel_color.y();
+    auto b = pixel_color.z();
+
+    int rbyte = int(255.999 * r);
+    int gbyte = int(255.999 * g);
+    int bbyte = int(255.999 * b);
+
+    out &lt;&lt; rbyte &lt;&lt; ' ' &lt;&lt; gbyte &lt;&lt; ' ' &lt;&lt; bbyte &lt;&lt; '\n';
+}
+
+#endif</code></pre>
+
+        <h2 class="fade-in">Использование класса цвета</h2>
+
+
+        <p>Теперь у нас есть два заголовочных файла содержащие реализацию класса вектора и цвета. Перепишем основную программу:
+
+            Было:</p>
+
+            <pre>
+                <code>    
+for (int j = 0; j < image_height; j++) {
+    for (int i = 0; i < image_width; i++) {
+        auto r = double(i) / (image_width-1); // row-intensity
+        auto g = double(j) / (image_height-1); // column-ntensity
+         auto b = 0.0;
+            
+        int ir = int(255.999 * r);  //red color intensity
+        int ig = int(255.999 * g);  //green color intensity
+        int ib = int(255.999 * b);  // blue color intensity
+            
+        std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+    }
+}
+                </code>
+            </pre>
+        
+
+        <p>Стало:</p>
+
+        <pre class="fade-in"><code>    for (int j = 0; j < image_height; j++) {
+            for (int i = 0; i < image_width; i++) {
+                auto pixel_color = color(double(i) / (image_width-1),
+                                        double(j) / (image_height-1),
+                                        0.0);
+                
+                //auto r = double(i) / (image_width-1); // row-intensity
+                //auto g = double(j) / (image_height-1); // column-ntensity
+                //auto b = 0.0;
+    
+                //int ir = int(255.999 * r);  //red color intensity
+                //int ig = int(255.999 * g);  //green color intensity
+                //int ib = int(255.999 * b);  // blue color intensity
+    
+                //std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+                write_color(std::cout, pixel_color);
+            }
+        }
+    }
+}</code></pre>
+
+    <p>Или по-другому:</p>
+
+    <pre class="fade-in"><code>
+        for (int j = 0; j < image_height; j++) {
+            for (int i = 0; i < image_width; i++) {
+                auto pixel_color = color(double(i) / (image_width-1),
+                                        double(j) / (image_height-1),
+                                        0.0);
+    
+                write_color(std::cout, pixel_color);
+            }
+        }
+    </code></pre>
+
+        <p class="fade-in">Мы получим точно такую же картину как и раньше.</p>
+    </div>
+
+    <script>
+        // Переключение темы
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const button = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
+                button.textContent = 'Светлая тема';
+            } else {
+                button.textContent = 'Темная тема';
+            }
+        }
+
+        // Анимация появления элементов при прокрутке
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Имитация прогресса рендеринга
+    function simulateRendering() {
+        const progressElement = document.createElement('p');
+        progressElement.textContent = 'Рендеринг... 0%';
+        document.querySelector('.content').appendChild(progressElement);
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressElement.textContent = `Рендеринг... ${progress}%`;
+            if (progress >= 100) {
+                clearInterval(interval);
+                progressElement.textContent = 'Рендеринг завершен!';
+            }
+        }, 300);
+    }
+
+    // Запуск имитации рендеринга через 3 секунды
+    setTimeout(simulateRendering, 3000);
+    </script>
+
+</body>
+
+</html>
