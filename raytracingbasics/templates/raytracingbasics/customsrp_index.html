@@ -1,0 +1,150 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom SRP</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+        td {
+            padding: 8px;
+            text-align: center;
+            vertical-align: top;
+        }
+        table img {
+            width: 250px;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+        h4 {
+            margin: 8px 0 0 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        td p {
+            margin: 0;
+            font-size: 14px;
+            text-align: center; /* Центрируем текст */
+        }
+
+        td:hover {
+            background-color: #f9f9f9;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Custom rendering pipeline</h1>
+        <p>...</p>
+        <table>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/23.png' %}" class="fade-in">
+                    <b>Custom Render Pipeline</b>
+
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/24.png' %}" class="fade-in">
+                    <b>Draw calls</b>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/25.png' %}" class="fade-in">
+                    <b>Directional lights</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/26.png' %}" class="fade-in">
+                    <b>Directional shadows</b>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/27.png' %}" class="fade-in">
+                    <b>Baked light</b>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/28.png' %}" class="fade-in">
+                    <b>Shadow masks</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/29.png' %}" class="fade-in">
+                    <p> <h4> <b>LOD and reflections</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/30.png' %}" class="fade-in">
+                    <p> <h4> <b>Complex maps</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/31.png' %}" class="fade-in">
+                    <p> <h4> <b>Point and spot lighting</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/32.png' %}" class="fade-in">
+                    <p> <h4> <b>Point and spot shadows</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/33.png' %}" class="fade-in">
+                    <p> <h4> <b>Post processing</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/34.png' %}" class="fade-in">
+                    <p> <h4> <b>HDR</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/35.png' %}" class="fade-in">
+                    <p> <h4> <b>Color grading</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/36.png' %}" class="fade-in">
+                    <p> <h4> <b>Multiple cameras</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/37.png' %}" class="fade-in">
+                    <p> <h4> <b>Particles</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/38.png' %}" class="fade-in">
+                    <p> <h4> <b>Render scale</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/39.png' %}" class="fade-in">
+                    <p> <h4> <b>FXAA</b></h4></p>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

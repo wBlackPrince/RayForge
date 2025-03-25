@@ -1,0 +1,165 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom SRP</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+        td {
+            padding: 8px;
+            text-align: center;
+            vertical-align: top;
+        }
+        table img {
+            width: 250px;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+        h4 {
+            margin: 8px 0 0 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        td p {
+            margin: 0;
+            font-size: 14px;
+            text-align: center; /* Центрируем текст */
+        }
+
+        td:hover {
+            background-color: #f9f9f9;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Rendering</h1>
+        <p>...</p>
+
+        <table>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/54.png' %}" class="fade-in">
+                    <b>Matrices</b>
+
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/55.png' %}" class="fade-in">
+                    <b>Shader Fundamentals</b>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/56.png' %}" class="fade-in">
+                    <b>Combining textures</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/57.png' %}" class="fade-in">
+                    <b>The first light</b>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/58.png' %}" class="fade-in">
+                    <b>Multiple lights</b>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/59.png' %}" class="fade-in">
+                    <b>Bumpiness</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/44.png' %}" class="fade-in">
+                    <p> <h4> <b>Shadows</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/60.png' %}" class="fade-in">
+                    <p> <h4> <b>Reflections</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/61.png' %}" class="fade-in">
+                    <p> <h4> <b>Complex materials</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/62.png' %}" class="fade-in">
+                    <p> <h4> <b>More complexity</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/63.png' %}" class="fade-in">
+                    <p> <h4> <b>Transparency</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/64.png' %}" class="fade-in">
+                    <p> <h4> <b>Semitransparent Shadows</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/65.png' %}" class="fade-in">
+                    <p> <h4> <b>Deffered shading</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/66.png' %}" class="fade-in">
+                    <p> <h4> <b>Fog</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/67.png' %}" class="fade-in">
+                    <p> <h4> <b>Deffered lights</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/68.png' %}" class="fade-in">
+                    <p> <h4> <b>Static lighting</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/69.png' %}" class="fade-in">
+                    <p> <h4> <b>Mixed lighting</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/70.png' %}" class="fade-in">
+                    <p> <h4> <b>Realtime GI and LOD groups</b></h4></p>
+                </td>
+            </tr>
+          <tr>
+              <td>
+                    <img src="{% static 'raytracingbasics/images/71.png' %}" class="fade-in">
+                    <p> <h4> <b>GPU Instancing</b></h4></p>
+              </td>
+              <td>
+                    <img src="{% static 'raytracingbasics/images/72.png' %}" class="fade-in">
+                    <p> <h4> <b>Parallax</b></h4></p>
+              </td>
+            <td></td>
+          </tr>
+        </table>
+    </div>
+</body>
+</html>

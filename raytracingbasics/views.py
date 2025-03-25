@@ -1,12 +1,18 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-# Create your views here.
+
 def index(request): #HttpRequest
-    return HttpResponse('Уроки по математике и программированию')
+    return render(request, 'raytracingbasics/index.html')
 
 def raytracingbasics_index(request): #HttpRequest
-    return HttpResponse('Уроки по ray tracing')
+    return render(request, 'raytracingbasics/raytracing_basics_index.html')
+
+def customsrp_index(request):
+    return render(request, 'raytracingbasics/customsrp_index.html')
+
+def rendering_index(request):
+    return render(request, 'raytracingbasics/rendering_index.html')
 
 def raytracingbasics_lesson_1(request): #HttpRequest
     return render(request, 'raytracingbasics/1_lesson.html')

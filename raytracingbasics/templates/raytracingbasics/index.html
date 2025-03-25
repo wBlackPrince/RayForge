@@ -1,0 +1,272 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  <style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tutorial-section {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #007BFF;
+    }
+
+    hr {
+        border: 0;
+        height: 1px;
+        background: #ddd;
+        margin: 20px 0;
+    }
+    img {
+            width: 280px;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+        }
+      .tutorial-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+
+    .difficulty {
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: white;
+    }
+
+    .difficulty.easy {
+        background-color: #28a745; /* зеленый */
+    }
+
+    .difficulty.intermediate {
+        background-color: #ffc107; /* желтый */
+        color: #333; /* темный текст для лучшей читаемости */
+    }
+
+    .difficulty.advanced {
+        background-color: #dc3545; /* красный */
+    }
+
+    .difficulty.crazy {
+        background-color: #8A2BE2; /* синий */
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Basics</h2>
+                    <span class="difficulty easy">Easy</span>
+            </div>
+            <p>These tutorials help you to get acquainted with Unity.</p>
+            <img src="{% static 'raytracingbasics/images/41.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Turing Complete</h2>
+                    <span class="difficulty easy">Easy</span>
+            </div>
+            <p>These tutorials about creating simulator of computer.</p>
+            <img src="{% static 'raytracingbasics/images/43.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Pseudorandom Noise</h2>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials about pseudorandom noises.</p>
+            <img src="{% static 'raytracingbasics/images/42.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Procedural meshes</h2>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials about generating procedural meshes.</p>
+            <img src="{% static 'raytracingbasics/images/48.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Pseudorandom surfaces</h2>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials about generating pseudorandom surfaces.</p>
+            <img src="{% static 'raytracingbasics/images/49.png' %}" class="fade-in" width = "300">
+        </section>
+
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Mechanics</h2>
+                    <span class="difficulty easy">Easy</span>
+            </div>
+            <p>Tutorials about object's movement. </p>
+            <img src="{% static 'raytracingbasics/images/52.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Object management</h2>
+                    <span class="difficulty easy">Easy</span>
+            </div>
+            <p>Tutorials about controling sets of objects(creating, saving, loading). </p>
+            <img src="{% static 'raytracingbasics/images/53.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Strategic Game AI</h2>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials about AI in strategic games</p>
+            <img src="{% static 'raytracingbasics/images/73.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <a href="{% url 'raytracingbasics'%}"><h2>Ray tracing C++</h2></a>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials about creating rendering system with C++</p>
+            <img src="{% static 'raytracingbasics/images/main_1.jpg' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <a href="{% url 'customsrp'%}"> <h2>Custom SRP</h2> </a>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials describe how to create a custom scriptable render pipeline in Unity. </p>
+            <img src="{% static 'raytracingbasics/images/33.png' %}" class="fade-in" width = "300">
+        </section>
+
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <a href="{% url 'rendering'%}"> <h2>Rendering</h2> </a>
+                    <span class="difficulty advanced">Advanced</span>
+            </div>
+            <p>These tutorials help you to get acquainted with Unity's default rendering pipeline.</p>
+            <img src="{% static 'raytracingbasics/images/44.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Advanced Rendering</h2>
+                    <span class="difficulty advanced">Advanced</span>
+            </div>
+            <p>These are tutorials covering more complex or specialized rendering techniques, going beyond Unity's standard shaders.</p>
+            <img src="{% static 'raytracingbasics/images/45.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Hex Map</h2>
+                    <span class="difficulty intermediate">Intermediate</span>
+            </div>
+            <p>These tutorials about generating hexagon maps for strategic games</p>
+            <img src="{% static 'raytracingbasics/images/46.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Hex Strategy</h2>
+                    <span class="difficulty crazy">Crazy</span>
+            </div>
+            <p>These tutorials about developing strategic game. These tutorials based on previos series.</p>
+            <img src="{% static 'raytracingbasics/images/47.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>PBR</h2>
+                    <span class="difficulty crazy">Crazy</span>
+            </div>
+            <p>These tutorials describe physical based rendering. </p>
+            <img src="{% static 'raytracingbasics/images/40.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Voxel world. Part 1</h2>
+                    <span class="difficulty crazy">Crazy</span>
+            </div>
+            <p>These tutorials about creating voxel game. </p>
+            <img src="{% static 'raytracingbasics/images/50.png' %}" class="fade-in" width = "300">
+        </section>
+
+        <hr>
+
+        <section class="tutorial-section">
+            <div class="tutorial-header">
+                    <h2>Voxel world. Part 2</h2>
+                    <span class="difficulty crazy">Crazy</span>
+            </div>
+            <p>These tutorials develop the idea of voxel game. </p>
+            <img src="{% static 'raytracingbasics/images/54.jpg' %}" class="fade-in" width = "300">
+        </section>
+
+    </div>
+</body>
+</html>

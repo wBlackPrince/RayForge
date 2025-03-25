@@ -1,0 +1,147 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ RayTracing Basics</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+        td {
+            padding: 8px;
+            text-align: center;
+            vertical-align: top;
+        }
+        table img {
+            width: 250px;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+        h4 {
+            margin: 8px 0 0 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        td p {
+            margin: 0;
+            font-size: 14px;
+            text-align: center; /* Центрируем текст */
+        }
+
+        td:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Ray tracing C++</h1>
+        <p>These tutorials provide an introduction to working with computer graphics without special software.</p>
+        <p>This series uses C++23.</p>
+        <table>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/1.png' %}" class="fade-in">
+                    <a href="{% url '1.1.lesson'%}"> <b>Color palette</b> </a>
+
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/4.png' %}" class="fade-in">
+                    <a href="{% url '1.2.lesson'%}"> <b>3D-Vectors</b> </a>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/6.png' %}" class="fade-in">
+                    <a href="{% url '1.3.lesson'%}"> <b>Rays</b> </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/8.png' %}" class="fade-in">
+                    <a href="{% url '1.4.lesson'%}"> <b>Application on rays</b> </a>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/10.png' %}" class="fade-in">
+                    <a href="{% url '1.5.lesson'%}"> <b>Sphere ray tracing</b> </a>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/13.png' %}" class="fade-in">
+                    <a href="{% url '1.6.lesson'%}"> <b>Normal Lighting</b> </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/14.png' %}" class="fade-in">
+                    <p> <h4> <b>Refactoring</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/15.png' %}" class="fade-in">
+                    <p> <h4> <b>Diffuse material</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/16.png' %}" class="fade-in">
+                    <p> <h4> <b>Lambert Lighting</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/17.png' %}" class="fade-in">
+                    <p> <h4> <b>Mirrored Light Reflection</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/18.png' %}" class="fade-in">
+                    <p> <h4> <b>Fuzzy Reflection</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/19.png' %}" class="fade-in">
+                    <p> <h4> <b>Refraction</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/20.png' %}" class="fade-in">
+                    <p> <h4> <b>Hollow glass</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/21.png' %}" class="fade-in">
+                    <p> <h4> <b>Orienting the camera</b></h4></p>
+                </td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/22.png' %}" class="fade-in">
+                    <p> <h4> <b>Defocus blur</b></h4></p>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <img src="{% static 'raytracingbasics/images/main_1.jpg' %}" class="fade-in">
+                    <p> <h4> <b>Final scene</b></h4></p>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

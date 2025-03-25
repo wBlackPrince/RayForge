@@ -16,10 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from raytracingbasics.views import index
+from raytracingbasics.views import index, customsrp_index, rendering_index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
-    path('raytracingbasics/', include('raytracingbasics.urls'))
+    path('raytracingbasics/', include('raytracingbasics.urls')),
+    path('customsrp/', customsrp_index, name = 'customsrp'),
+    path('rendering/', rendering_index, name = 'rendering')
 ]
